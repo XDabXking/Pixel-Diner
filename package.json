@@ -1,0 +1,6 @@
+{
+  "name": "pixel-diner",
+  "private": true,
+  "dependencies": { "@netlify/blobs": "latest" }
+}
+

@@ -1,0 +1,1621 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>PIXEL DINER DELUXE</title>
+    <!-- Tab icon: the pixel burger -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20fill%3D%22%23e9a23b%22%20x%3D%224%22%20y%3D%222%22%20width%3D%228%22%20height%3D%221%22/%3E%3Crect%20fill%3D%22%23e9a23b%22%20x%3D%223%22%20y%3D%223%22%20width%3D%2210%22%20height%3D%221%22/%3E%3Crect%20fill%3D%22%23e9a23b%22%20x%3D%222%22%20y%3D%224%22%20width%3D%2212%22%20height%3D%222%22/%3E%3Crect%20fill%3D%22%23fff3c0%22%20x%3D%226%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22/%3E%3Crect%20fill%3D%22%23fff3c0%22%20x%3D%229%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22/%3E%3Crect%20fill%3D%22%232fa82f%22%20x%3D%221%22%20y%3D%226%22%20width%3D%2214%22%20height%3D%222%22/%3E%3Crect%20fill%3D%22%234a2410%22%20x%3D%222%22%20y%3D%228%22%20width%3D%2212%22%20height%3D%223%22/%3E%3Crect%20fill%3D%22%236b3a1e%22%20x%3D%223%22%20y%3D%228%22%20width%3D%228%22%20height%3D%221%22/%3E%3Crect%20fill%3D%22%23e9a23b%22%20x%3D%222%22%20y%3D%2211%22%20width%3D%2212%22%20height%3D%222%22/%3E%3Crect%20fill%3D%22%23c97b1e%22%20x%3D%223%22%20y%3D%2213%22%20width%3D%2210%22%20height%3D%221%22/%3E%3C/svg%3E"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <style>
+      /* ---- Colors and base page ---- */
+      :root {
+        --bg: #0d0630;
+        --panel: #1b1050;
+        --edge: #5b3fd0;
+        --pink: #ff2e93;
+        --cyan: #27f0ff;
+        --yel: #ffe033;
+        --grn: #5dff6e;
+        --red: #ff4040;
+        --ink: #f4eaff;
+        --mut: #a995f5;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: "Press Start 2P", ui-monospace, Menlo, monospace;
+        font-size: 10px;
+        line-height: 1.7;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        user-select: none;
+        -webkit-user-select: none;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        background:
+          radial-gradient(1.5px 1.5px at 12% 18%, #fff, transparent),
+          radial-gradient(1px 1px at 78% 12%, #9ff, transparent),
+          radial-gradient(1.5px 1.5px at 40% 70%, #fff, transparent),
+          radial-gradient(1px 1px at 90% 60%, #fcf, transparent),
+          radial-gradient(1px 1px at 25% 90%, #fff, transparent),
+          radial-gradient(1px 1px at 62% 38%, #ff9, transparent),
+          linear-gradient(#0d0630, #1d0b4d 60%, #3a0f5e);
+        background-attachment: fixed;
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(transparent 0 2px, rgba(0, 0, 0, 0.2) 2px 4px);
+        pointer-events: none;
+        z-index: 50;
+      }
+      body.nocrt::after {
+        display: none;
+      }
+      .px {
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        display: block;
+      }
+      #g {
+        width: 100%;
+        max-width: 600px;
+        padding: 12px;
+      }
+      #g.hurt {
+        animation: hurt 0.35s steps(4);
+      }
+      @keyframes hurt {
+        0%,
+        100% {
+          transform: none;
+        }
+        25% {
+          transform: translateX(-6px);
+          filter: brightness(1.6) hue-rotate(-40deg);
+        }
+        75% {
+          transform: translateX(6px);
+        }
+      }
+      /* ---- Top bar: score, level, hearts ---- */
+      .hud {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+        font-size: 9px;
+        background: #000;
+        border: 3px solid var(--edge);
+        padding: 7px 9px;
+        box-shadow:
+          0 0 0 3px #000,
+          0 0 14px rgba(91, 63, 208, 0.7);
+      }
+      .hud b {
+        color: var(--cyan);
+        font-weight: 400;
+      }
+      .hud .sc {
+        color: var(--yel);
+      }
+      .prog {
+        height: 14px;
+        background: #000;
+        border: 3px solid var(--edge);
+        margin: 8px 0;
+        position: relative;
+      }
+      .prog i {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: repeating-linear-gradient(90deg, var(--pink) 0 6px, #c01870 6px 8px);
+        transition: width 0.2s steps(5);
+      }
+      .prog em {
+        position: absolute;
+        right: 4px;
+        top: -1px;
+        font-size: 7px;
+        font-style: normal;
+        color: #fff;
+        line-height: 8px;
+        margin-top: 1px;
+        text-shadow: 1px 1px 0 #000;
+      }
+      h1 {
+        font-size: clamp(22px, 7vw, 34px);
+        margin: 6px 0;
+        color: var(--yel);
+        text-shadow:
+          3px 3px 0 var(--pink),
+          6px 6px 0 #4a1a7a;
+        text-align: center;
+        line-height: 1.3;
+        animation: neon 2s steps(2) infinite;
+      }
+      @keyframes neon {
+        50% {
+          color: #fff6a0;
+        }
+      }
+      h2 {
+        font-size: 11px;
+        color: var(--cyan);
+        margin: 10px 0 2px;
+        text-align: center;
+      }
+      /* ---- Customer tables ---- */
+      .seats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+      }
+      .seat {
+        background: linear-gradient(#26166a, #1b1050);
+        border: 4px solid var(--edge);
+        min-height: 128px;
+        padding: 7px;
+        position: relative;
+        cursor: pointer;
+        box-shadow:
+          4px 4px 0 #000,
+          inset 0 0 0 2px #000;
+      }
+      .seat.empty {
+        opacity: 0.4;
+        cursor: default;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--mut);
+        font-size: 8px;
+        text-align: center;
+      }
+      .seat:active:not(.empty) {
+        border-color: var(--cyan);
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .want {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .want > div {
+        background: #fff;
+        border: 3px solid #000;
+        padding: 2px;
+        box-shadow: 2px 2px 0 var(--pink);
+      }
+      .bar {
+        height: 12px;
+        border: 3px solid #000;
+        background: #000;
+        margin-top: 7px;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+      .say {
+        font-size: 8px;
+        margin-top: 5px;
+        color: var(--cyan);
+        min-height: 12px;
+      }
+      .seat.eat {
+        border-color: var(--grn);
+        animation: bob 0.3s steps(2) infinite;
+      }
+      .seat.mad {
+        border-color: var(--red);
+        animation: shake 0.15s steps(2) infinite;
+      }
+      .seat.ice {
+        border-color: #9ff;
+        box-shadow:
+          4px 4px 0 #000,
+          0 0 14px #9ff;
+      }
+      @keyframes bob {
+        50% {
+          transform: translateY(-3px);
+        }
+      }
+      @keyframes shake {
+        50% {
+          transform: translateX(3px);
+        }
+      }
+      /* ---- Kitchen: plate, hold slots, ingredient buttons ---- */
+      .kitchen {
+        margin-top: 14px;
+        background: var(--panel);
+        border: 4px solid var(--pink);
+        padding: 10px;
+        box-shadow:
+          4px 4px 0 #000,
+          0 0 16px rgba(255, 46, 147, 0.5);
+      }
+      .plate {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 54px;
+        background: #000;
+        border: 3px solid var(--edge);
+        padding: 6px 10px;
+      }
+      .plate small {
+        font-size: 8px;
+        color: var(--grn);
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .hold {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        align-items: center;
+        font-size: 8px;
+        color: var(--mut);
+      }
+      .slot {
+        width: 58px;
+        height: 58px;
+        background: #000;
+        border: 3px dashed var(--edge);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 0;
+        box-shadow: none;
+        color: inherit;
+      }
+      .slot.sel {
+        border: 3px solid var(--grn);
+        background: #0b2b12;
+      }
+      .ings {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 5px;
+        margin-top: 10px;
+      }
+      /* ---- Buttons ---- */
+      button {
+        font-family: inherit;
+        font-size: 9px;
+        color: #000;
+        background: var(--yel);
+        border: 3px solid #000;
+        box-shadow: 0 5px 0 #a58b00;
+        padding: 9px 6px;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+      button:active {
+        transform: translateY(4px);
+        box-shadow: 0 1px 0 #a58b00;
+      }
+      button.ing {
+        background: var(--cyan);
+        box-shadow: 0 5px 0 #0a8f99;
+        padding: 3px 0;
+        display: flex;
+        justify-content: center;
+      }
+      button.red {
+        background: var(--red);
+        box-shadow: 0 5px 0 #a01818;
+        color: #fff;
+      }
+      button.grn {
+        background: var(--grn);
+        box-shadow: 0 5px 0 #1f9a2f;
+      }
+      button.pnk {
+        background: var(--pink);
+        box-shadow: 0 5px 0 #a01860;
+        color: #fff;
+      }
+      button.on {
+        background: var(--pink);
+        color: #fff;
+        box-shadow: 0 5px 0 #a01860;
+      }
+      button:disabled {
+        opacity: 0.4;
+      }
+      button:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 2px;
+      }
+      .acts {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .acts button {
+        flex: 1;
+      }
+      /* ---- Recipe book under the kitchen ---- */
+      .book-title {
+        text-align: center;
+        color: var(--cyan);
+        font-size: 12px;
+        margin: 18px 0 10px;
+        text-shadow: 2px 2px 0 #000;
+      }
+      .menu {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(172px, 1fr));
+        gap: 8px;
+      }
+      .rc {
+        background: var(--panel);
+        border: 3px solid var(--edge);
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        flex-wrap: wrap;
+        box-shadow: 3px 3px 0 #000;
+      }
+      .rc.pw {
+        border-color: var(--pink);
+      }
+      .rc.hl {
+        border-color: var(--grn);
+        background: #0b2b12;
+        box-shadow: 0 0 12px var(--grn);
+      }
+      .rc .eq {
+        color: var(--yel);
+        font-size: 12px;
+        font-weight: 400;
+      }
+      .rc .nm {
+        width: 100%;
+        font-size: 8px;
+        color: var(--ink);
+        margin-top: 3px;
+      }
+      .rc.pw .nm {
+        color: var(--pink);
+      }
+      /* ---- Menu overlay (title, difficulty, how to play, settings) ---- */
+      .ov {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 4, 34, 0.95);
+        display: flex;
+        overflow: auto;
+        z-index: 5;
+        padding: 16px;
+        padding-top: calc(16px + env(safe-area-inset-top, 0px));
+      }
+      .in {
+        margin: auto;
+        width: 100%;
+        max-width: 520px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        text-align: center;
+      }
+      .in p {
+        margin: 0;
+      }
+      .parade {
+        display: flex;
+        gap: 2px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .big {
+        font-size: 12px;
+        padding: 14px 18px;
+        width: 100%;
+        max-width: 320px;
+      }
+      .d {
+        width: 100%;
+        max-width: 380px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-align: left;
+        padding: 12px;
+        border: 4px solid #000;
+        color: #000;
+        font-size: 14px;
+      }
+      .d small {
+        display: block;
+        font-size: 7px;
+        margin-top: 6px;
+        line-height: 1.6;
+      }
+      .d.easy {
+        background: var(--grn);
+        box-shadow: 0 7px 0 #1f9a2f;
+      }
+      .d.medium {
+        background: var(--yel);
+        box-shadow: 0 7px 0 #a58b00;
+      }
+      .d.hard {
+        background: var(--red);
+        color: #fff;
+        box-shadow: 0 7px 0 #a01818;
+      }
+      .d:active {
+        transform: translateY(6px);
+        box-shadow: 0 1px 0 #000;
+      }
+      .card {
+        width: 100%;
+        background: var(--panel);
+        border: 3px solid var(--edge);
+        padding: 8px;
+        text-align: left;
+        font-size: 8px;
+        line-height: 1.8;
+      }
+      .rec {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding: 5px 0;
+        border-bottom: 2px dotted #3a2580;
+        flex-wrap: wrap;
+      }
+      .rec span {
+        margin-left: auto;
+        color: var(--yel);
+      }
+      .rec:last-child {
+        border: 0;
+      }
+      .blink {
+        animation: bl 1s steps(2) infinite;
+        color: var(--grn);
+      }
+      @keyframes bl {
+        50% {
+          opacity: 0;
+        }
+      }
+      /* ---- Floating score text and level banners ---- */
+      .pop {
+        position: fixed;
+        transform: translateX(-50%);
+        z-index: 20;
+        pointer-events: none;
+        font-size: 11px;
+        text-shadow: 2px 2px 0 #000;
+        animation: rise 1s steps(10) forwards;
+      }
+      @keyframes rise {
+        to {
+          transform: translate(-50%, -55px);
+          opacity: 0;
+        }
+      }
+      .ban {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 38%;
+        text-align: center;
+        z-index: 30;
+        pointer-events: none;
+        font-size: clamp(18px, 6vw, 28px);
+        color: var(--yel);
+        text-shadow:
+          3px 3px 0 var(--pink),
+          6px 6px 0 #000;
+        animation: ban 1.4s steps(14) forwards;
+      }
+      @keyframes ban {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        20% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+      }
+      .hide {
+        display: none;
+      }
+      @media (max-width: 420px) {
+        .ings {
+          grid-template-columns: repeat(6, 1fr);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="g">
+      <!-- Top bar -->
+      <div class="hud">
+        <span>SCORE <b class="sc" id="sc">0</b></span
+        ><span>LVL <b id="lv">1</b></span
+        ><span>HI <b id="hi">0</b></span
+        ><span id="lives"></span
+        ><button id="mb" title="Pause (Esc)" style="font-size: 8px; padding: 5px 7px">MENU</button>
+      </div>
+      <div class="prog"><i id="pg"></i><em id="cb"></em></div>
+      <!-- Customer tables (filled in by JavaScript) -->
+      <div class="seats" id="seats"></div>
+      <!-- Kitchen -->
+      <div class="kitchen">
+        <div class="plate" id="plate"></div>
+        <div class="hold">
+          <span>HOLD</span><button class="slot" data-h="0" aria-label="Hold slot 1"></button
+          ><button class="slot" data-h="1" aria-label="Hold slot 2"></button>
+          <div class="acts" style="margin: 0 0 0 auto; flex: 1">
+            <button id="hb" class="grn">HOLD</button>
+          </div>
+        </div>
+        <div class="ings" id="ings"></div>
+        <div class="acts">
+          <button id="trash" class="red">TRASH</button><button id="pw" class="pnk hide"></button>
+        </div>
+      </div>
+      <div class="book-title">RECIPE BOOK</div>
+      <div class="menu" id="menu"></div>
+    </div>
+    <!-- Menu overlay -->
+    <div class="ov" id="ov"><div class="in" id="in"></div></div>
+    <script>
+      (() => {
+        // ============================================================
+        // ERROR HANDLER: shows a message instead of a blank screen
+        // ============================================================
+        window.onerror = function (m, u, l) {
+          var o = document.getElementById("in");
+          document.getElementById("ov").classList.remove("hide");
+          o.innerHTML =
+            '<h1 style="font-size:16px">OOPS</h1><p>' +
+            m +
+            " (line " +
+            l +
+            ')</p><button onclick="location.reload()">RELOAD</button>';
+        };
+        // ============================================================
+        // SPRITES: food and ingredients as 16x16 pixel grids
+        // Each rectangle is [color, x, y, width, height]
+        // ============================================================
+        // prettier-ignore
+        const Q={
+bun:[['#e9a23b',4,4,8,1],['#e9a23b',3,5,10,1],['#e9a23b',2,6,12,2],['#c97b1e',2,7,12,1],['#e9a23b',2,10,12,2],['#c97b1e',3,12,10,1],['#fff3c0',6,5,1,1],['#fff3c0',9,5,1,1],['#fff3c0',7,6,1,1]],
+patty:[['#4a2410',2,6,12,5],['#6b3a1e',3,6,10,3],['#8a4b26',4,7,2,1],['#8a4b26',9,8,2,1]],
+lettuce:[['#2fa82f',2,6,12,5],['#5fe65f',3,5,3,2],['#5fe65f',8,5,4,2],['#7aff7a',5,8,4,1],['#2fa82f',1,8,1,2],['#2fa82f',14,8,1,2]],
+noodle:[['#f2c94c',2,4,12,2],['#f2c94c',2,7,12,2],['#f2c94c',2,10,12,2],['#d9a82a',4,6,8,1],['#d9a82a',4,9,8,1]],
+egg:[['#fff',4,4,8,9],['#fff',3,5,10,7],['#ffc400',6,7,4,4],['#ffe066',6,7,1,1]],
+rice:[['#fff',4,5,8,1],['#fff',3,6,10,5],['#e6e6f2',3,10,10,1],['#c8c8d8',6,8,1,1],['#c8c8d8',9,7,1,1]],
+fish:[['#ff7a59',2,5,12,6],['#ffb199',3,6,10,1],['#ffb199',3,8,10,1],['#d9482a',2,10,12,1]],
+dough:[['#f1d9a4',4,3,8,1],['#f1d9a4',2,4,12,8],['#f1d9a4',4,12,8,1],['#d9b97a',4,6,1,1],['#d9b97a',10,9,1,1]],
+cheese:[['#ffd32a',2,5,12,6],['#ffe873',2,5,12,1],['#c79a00',2,10,12,1],['#c79a00',5,7,2,2],['#c79a00',10,8,2,1]],
+tomato:[['#e0301e',4,5,8,1],['#e0301e',3,6,10,6],['#e0301e',4,12,8,1],['#ff6a55',5,7,2,2],['#2fa82f',7,3,2,2],['#2fa82f',5,4,2,1],['#2fa82f',9,4,2,1]],
+cream:[['#fff',3,8,10,4],['#fff',4,6,8,2],['#fff',6,4,4,2],['#ffd0e8',6,5,1,1],['#ffd0e8',5,10,1,1],['#e6e6f2',3,11,10,1]],
+cherry:[['#2fa82f',7,2,1,6],['#2fa82f',8,2,3,1],['#d1002f',3,8,5,5],['#d1002f',9,9,4,4],['#ff4d6d',4,9,1,1],['#ff4d6d',10,10,1,1]],
+potato:[['#c28a4a',4,4,8,9],['#c28a4a',3,5,10,7],['#a06a30',5,6,1,1],['#a06a30',9,9,1,1],['#a06a30',7,8,1,1]],
+sausage:[['#b5341e',2,6,12,4],['#d9533a',3,6,10,1],['#8a2412',2,9,12,1],['#b5341e',1,7,1,2],['#b5341e',14,7,1,2]],
+cocoa:[['#5a2e14',3,3,10,10],['#7a4a28',4,4,4,3],['#7a4a28',9,8,3,3],['#3a1c0a',3,12,10,1],['#ffd32a',3,3,10,1]],
+ice:[['#bfeeff',3,4,10,9],['#fff',4,5,3,2],['#8ad4f0',3,12,10,1],['#8ad4f0',12,5,1,7]],
+burger:[['#e9a23b',4,2,8,1],['#e9a23b',3,3,10,1],['#e9a23b',2,4,12,2],['#fff3c0',6,3,1,1],['#fff3c0',9,3,1,1],['#2fa82f',1,6,14,2],['#4a2410',2,8,12,3],['#6b3a1e',3,8,8,1],['#e9a23b',2,11,12,2],['#c97b1e',3,13,10,1]],
+cheeseburger:[['#e9a23b',4,2,8,1],['#e9a23b',3,3,10,1],['#e9a23b',2,4,12,2],['#fff3c0',6,3,1,1],['#fff3c0',9,3,1,1],['#ffd32a',1,6,14,1],['#ffd32a',3,7,2,2],['#4a2410',2,7,12,3],['#6b3a1e',5,7,7,1],['#e9a23b',2,10,12,3],['#c97b1e',3,13,10,1]],
+hotdog:[['#e9a23b',1,6,14,6],['#c97b1e',1,11,14,1],['#b5341e',0,7,16,3],['#d9533a',1,7,14,1],['#ffd32a',3,8,2,1],['#ffd32a',7,8,2,1],['#ffd32a',11,8,2,1]],
+fries:[['#ffd24a',3,2,2,7],['#ffd24a',6,1,2,8],['#ffd24a',9,2,2,7],['#ffd24a',12,3,1,6],['#d9302a',2,8,12,6],['#a81f1a',4,13,8,1],['#fff',5,10,6,2]],
+ramen:[['#ccc',5,1,1,2],['#ccc',8,0,1,3],['#f2c94c',3,4,10,4],['#d9a82a',5,6,6,1],['#fff',9,3,4,3],['#ffc400',10,4,2,1],['#fff',2,8,12,1],['#d9302a',2,9,12,4],['#a81f1a',4,13,8,1]],
+sushi:[['#fff',2,8,12,5],['#e6e6f2',2,12,12,1],['#ff7a59',2,5,12,4],['#ffb199',3,6,10,1],['#10261a',6,5,4,8]],
+pizza:[['#c97b1e',1,2,14,2],['#ffc64a',2,4,12,2],['#ffc64a',3,6,10,2],['#ffc64a',4,8,8,2],['#ffc64a',5,10,6,2],['#ffc64a',6,12,4,1],['#ffc64a',7,13,2,1],['#d1301e',4,4,2,2],['#d1301e',9,5,2,2],['#d1301e',6,8,2,2]],
+eggrice:[['#fff',4,2,8,5],['#fff',3,3,10,3],['#ffc400',7,3,2,2],['#fff',3,6,10,2],['#fff',2,8,12,1],['#3a6fd9',2,9,12,4],['#2a4fa0',4,13,8,1]],
+sundae:[['#d1002f',7,1,3,3],['#fff',4,4,8,4],['#ffd0e8',3,6,10,2],['#8a4b26',6,5,2,1],['#bfeeff',3,8,10,3],['#bfeeff',5,11,6,1],['#bfeeff',7,12,2,2],['#bfeeff',4,14,8,1]],
+cake:[['#d1002f',7,2,3,3],['#2fa82f',8,1,1,1],['#fff',2,5,12,2],['#fff',2,7,1,2],['#fff',6,7,1,2],['#fff',11,7,1,2],['#f4b6d2',3,7,10,3],['#8a4b26',3,10,10,1],['#f4b6d2',3,11,10,1],['#8a4b26',3,12,10,2]],
+shake:[['#ff2e93',10,0,2,5],['#fff',3,3,10,2],['#7a4a28',4,5,8,7],['#fff',4,7,8,1],['#5a2e14',5,12,6,2]]};
+        // Turns a list of rectangles into a tiny SVG picture
+        function spr(rs) {
+          return (
+            "data:image/svg+xml," +
+            encodeURIComponent(
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">' +
+                rs
+                  .map(
+                    (r) =>
+                      `<rect fill="${r[0]}" x="${r[1]}" y="${r[2]}" width="${r[3]}" height="${r[4]}"/>`,
+                  )
+                  .join("") +
+                "</svg>",
+            )
+          );
+        }
+        const IM = {};
+        for (const k in Q) IM[k] = spr(Q[k]);
+        const px = (s, n) => `<img class="px" src="${s}" width="${n}" height="${n}" alt="">`,
+          ig = (k, n = 36) => px(IM[k], n);
+        // ============================================================
+        // CUSTOMER SPRITES: built from shapes, one per kind and mood
+        // ============================================================
+        const PC = {}; // cache of finished customer pictures
+        // Draws a customer: c = who they are, m = mood (ok, meh, mad, eat)
+        function pp(c, m) {
+          const K = c.k,
+            k = K + c.skin + c.hair + c.shirt + m;
+          if (PC[k]) return PC[k];
+          const kid = K === "kid",
+            [hx, hy, hw, hh] = kid ? [5, 6, 6, 5] : [5, 3, 6, 7],
+            [bx, by, bw] = kid ? [4, 11, 8] : [3, 10, 10],
+            sk = m === "mad" && K !== "alien" ? "#ff8a70" : c.skin;
+          const ey = hy + Math.floor(hh / 2) - 1,
+            my = hy + hh - 2,
+            r = [
+              [c.shirt, bx, by, bw, 16 - by],
+              ["#fff", bx + bw / 2 - 1, by, 2, 1],
+              [sk, hx, hy, hw, hh],
+            ];
+          if (K === "ninja")
+            r.push(["#111", hx - 1, hy - 1, hw + 2, hh + 1], [sk, hx + 1, ey, hw - 2, 2]);
+          else if (K === "cap")
+            r.push(
+              ["#ff2e93", hx - 1, hy - 1, hw + 2, 2],
+              ["#ff2e93", hx - 1, hy + 1, hw + 3, 1],
+              [c.hair, hx - 1, hy + 1, 1, 2],
+            );
+          else if (K === "punk") r.push([c.hair, hx + 2, hy - 3, 2, 4]);
+          else if (K !== "alien" && K !== "king")
+            r.push(
+              [c.hair, hx, hy - 1, hw, 2],
+              [c.hair, hx - 1, hy, 1, 3],
+              [c.hair, hx + hw, hy, 1, 3],
+            );
+          if (K === "girl")
+            r.push([c.hair, hx - 1, hy, 1, hh + 2], [c.hair, hx + hw, hy, 1, hh + 2]);
+          if (K === "granny")
+            r.push(
+              [c.hair, hx + 2, hy - 3, 3, 2],
+              ["#ff9aa8", hx, hy + hh - 3, 1, 1],
+              ["#ff9aa8", hx + hw - 1, hy + hh - 3, 1, 1],
+            );
+          if (kid)
+            r.push(
+              [c.hair, hx + 2, hy - 2, 2, 1],
+              ["#ff6a8a", hx, hy + hh - 2, 1, 1],
+              ["#ff6a8a", hx + hw - 1, hy + hh - 2, 1, 1],
+            );
+          if (K === "alien")
+            r.push(
+              ["#6bff6b", hx + 1, hy - 3, 1, 3],
+              ["#6bff6b", hx + hw - 2, hy - 3, 1, 3],
+              ["#ff2e93", hx + 1, hy - 4, 1, 1],
+              ["#ff2e93", hx + hw - 2, hy - 4, 1, 1],
+            );
+          if (K === "king")
+            r.push(
+              ["#ffd32a", hx, hy - 2, hw, 2],
+              ["#ffd32a", hx, hy - 3, 1, 1],
+              ["#ffd32a", hx + 2, hy - 3, 2, 1],
+              ["#ffd32a", hx + hw - 1, hy - 3, 1, 1],
+              ["#d1002f", hx + 2, hy - 2, 1, 1],
+            );
+          if (K === "shades")
+            r.push(
+              ["#111", hx, ey, hw, 2],
+              ["#27f0ff", hx + 1, ey, 1, 1],
+              ["#27f0ff", hx + hw - 3, ey, 1, 1],
+              ["#111", hx - 1, ey, 1, 1],
+              ["#111", hx + hw, ey, 1, 1],
+            );
+          else if (m === "eat")
+            r.push(["#000", hx + 1, ey + 1, 2, 1], ["#000", hx + hw - 3, ey + 1, 2, 1]);
+          else {
+            if (K === "alien") r.push(["#000", hx, ey, 2, 3], ["#000", hx + hw - 2, ey, 2, 3]);
+            else r.push(["#000", hx + 1, ey, 1, 2], ["#000", hx + hw - 2, ey, 1, 2]);
+            if (m === "mad")
+              r.push(["#000", hx, ey - 1, 2, 1], ["#000", hx + hw - 2, ey - 1, 2, 1]);
+          }
+          if (K === "nerd")
+            r.push(
+              ["#111", hx, ey - 1, 3, 1],
+              ["#111", hx + hw - 3, ey - 1, 3, 1],
+              ["#111", hx + 2, ey, 2, 1],
+              ["#111", hx, ey + 2, 3, 1],
+              ["#111", hx + hw - 3, ey + 2, 3, 1],
+            );
+          if (K === "ninja" && m === "mad") r.push(["#d1002f", hx - 1, hy, hw + 2, 1]);
+          if (K !== "ninja") {
+            if (m === "ok")
+              r.push(
+                ["#000", hx + 1, my, hw - 2, 1],
+                ["#000", hx + 1, my - 1, 1, 1],
+                ["#000", hx + hw - 2, my - 1, 1, 1],
+              );
+            else if (m === "meh") r.push(["#000", hx + 2, my, hw - 4, 1]);
+            else if (m === "eat") r.push(["#a01818", hx + 2, my - 1, hw - 4, 2]);
+            else
+              r.push(
+                ["#000", hx + 2, my, hw - 4, 1],
+                ["#000", hx + 1, my + 1, 1, 1],
+                ["#000", hx + hw - 2, my + 1, 1, 1],
+              );
+          }
+          if (K === "king") r.push(["#fff", hx, hy + hh - 1, hw, 2]);
+          return (PC[k] = spr(r));
+        }
+        // ============================================================
+        // GAME DATA: recipes, customer types, difficulty
+        // ============================================================
+
+        const REC = [
+          { id: "fries", n: "FRIES", i: ["potato"] },
+          { id: "hotdog", n: "HOT DOG", i: ["bun", "sausage"] },
+          { id: "ramen", n: "RAMEN", i: ["noodle", "egg"] },
+          { id: "sushi", n: "SUSHI", i: ["rice", "fish"] },
+          { id: "eggrice", n: "EGG RICE", i: ["rice", "egg"] },
+          { id: "burger", n: "BURGER", i: ["bun", "patty", "lettuce"] },
+          { id: "pizza", n: "PIZZA", i: ["dough", "cheese", "tomato"] },
+          { id: "cheeseburger", n: "CHEESEBURGER", i: ["bun", "patty", "cheese"] },
+          { id: "sundae", n: "SUNDAE", i: ["ice", "cream", "cherry"] },
+          {
+            id: "cake",
+            n: "CAKE +6s",
+            i: ["dough", "cream", "cherry"],
+            pw: "cake",
+            lab: "EAT CAKE +6s",
+          },
+          { id: "shake", n: "SHAKE FREEZE", i: ["cocoa", "ice"], pw: "shake", lab: "FREEZE 4s" },
+        ];
+        const ORD = REC.filter((r) => !r.pw),
+          ING = [
+            "bun",
+            "patty",
+            "lettuce",
+            "cheese",
+            "tomato",
+            "dough",
+            "noodle",
+            "egg",
+            "rice",
+            "fish",
+            "cream",
+            "cherry",
+            "potato",
+            "sausage",
+            "cocoa",
+            "ice",
+          ];
+        const KINDS = [
+          { k: "normal", pm: 1, d: "Regular customer." },
+          { k: "girl", pm: 1 },
+          { k: "cap", pm: 1 },
+          { k: "shades", pm: 1, vip: 1.5, d: "VIP in shades: pays 1.5x points." },
+          { k: "kid", pm: 0.7, d: "Hungry kid: loses patience fast!" },
+          { k: "granny", pm: 1.4, d: "Granny: very patient." },
+          { k: "punk", pm: 0.9, d: "Punk: a little fussy." },
+          { k: "nerd", pm: 1.15, d: "Nerd: calm and careful." },
+          { k: "alien", pm: 0.85, d: "Alien: space guest, gets cranky." },
+          { k: "ninja", pm: 0.55, vip: 2, d: "Ninja: vanishes fast, pays 2x!" },
+          { k: "king", pm: 1.2, vip: 2, d: "King: royal tipper, pays 2x." },
+        ];
+        // Difficulty: lives, patience multiplier (pm), customer rush speed (sp), score multiplier (sc)
+        const DIF = {
+          easy: {
+            n: "EASY",
+            lives: 5,
+            pm: 1.35,
+            sp: 1.3,
+            sc: 1,
+            d: "5 hearts. Patient guests, slow rush.",
+          },
+          medium: {
+            n: "MEDIUM",
+            lives: 3,
+            pm: 1,
+            sp: 1,
+            sc: 1.5,
+            d: "3 hearts. The classic diner shift.",
+          },
+          hard: {
+            n: "HARD",
+            lives: 2,
+            pm: 0.75,
+            sp: 0.75,
+            sc: 2,
+            d: "2 hearts. Fussy guests, 2x score!",
+          },
+        };
+        // Random color palettes for customers
+        const SK = ["#f2c28f", "#d9a070", "#8a5a3a", "#f7d2a8", "#c98a5a"],
+          SH = ["#3a8fd9", "#d93a3a", "#3ad98f", "#d9a43a", "#9a5ad9", "#e0e0e0"],
+          HR = ["#2a1a0e", "#6b3a1e", "#e0b030", "#111", "#c4501e"],
+          PK = ["#ff2e93", "#27f0ff", "#5dff6e"];
+        const rnd = (a) => a[(Math.random() * a.length) | 0],
+          $ = (id) => document.getElementById(id);
+
+        // ============================================================
+        // ANTI-CHEAT
+        // Detects edited saves and tampered game state, then locks the game
+        // with a cheater screen that survives refreshes (see netlify/ for the server part).
+        // Note: no browser game can be 100% cheat-proof. This stops casual cheating.
+        // ============================================================
+        const hash = (s) => {
+          let h = 2166136261;
+          for (const ch of String(s) + "pixel-diner-k3y") {
+            h ^= ch.charCodeAt(0);
+            h = Math.imul(h, 16777619);
+          }
+          return (h >>> 0).toString(36);
+        };
+        let cheated = false,
+          scoreSig = hash("s0");
+        const BAN_KEY = "pd_ban";
+        // The man in the gray jacket (16x16 pixel picture)
+        const GUY = spr([
+          ["#555", 5, 1, 6, 3],
+          ["#111", 5, 3, 6, 1],
+          ["#555", 2, 4, 12, 1],
+          ["#e0b080", 5, 5, 6, 5],
+          ["#000", 4, 6, 8, 2],
+          ["#27f0ff", 5, 6, 1, 1],
+          ["#27f0ff", 9, 6, 1, 1],
+          ["#000", 6, 9, 4, 1],
+          ["#e0b080", 7, 10, 2, 1],
+          ["#8a8a96", 1, 11, 14, 5],
+          ["#6a6a76", 5, 11, 2, 5],
+          ["#6a6a76", 9, 11, 2, 5],
+          ["#fff", 7, 11, 2, 5],
+        ]);
+        const CHEAT_CSS = `position:fixed;inset:0;z-index:2147483647;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:20px;font-family:'Press Start 2P',monospace`;
+        const CHEAT_HTML = `<img src="${GUY}" width="220" height="220" alt="" style="image-rendering:pixelated"><div style="color:#ff2e2e;font-size:clamp(16px,5vw,30px);line-height:1.5;text-shadow:3px 3px 0 #5a0000">DIRTY LITTLE<br>CHEATER</div><div style="color:#888;font-size:9px;line-height:2">I SEE EVERYTHING, KID.<br>NO REFRESH. NO FRESH START.</div>`;
+        // Remember the ban in 6 places: localStorage, sessionStorage, cookie, window.name, IndexedDB, server
+        function banSet() {
+          try {
+            localStorage.setItem(BAN_KEY, "1");
+          } catch (e) {}
+          try {
+            sessionStorage.setItem(BAN_KEY, "1");
+          } catch (e) {}
+          try {
+            document.cookie = BAN_KEY + "=1;max-age=315360000;path=/;SameSite=Lax";
+          } catch (e) {}
+          try {
+            window.name = BAN_KEY;
+          } catch (e) {}
+          try {
+            const r = indexedDB.open("pd_ban", 1);
+            r.onupgradeneeded = () => r.result.createObjectStore("b");
+            r.onsuccess = () => {
+              try {
+                r.result.transaction("b", "readwrite").objectStore("b").put(1, "x");
+              } catch (e) {}
+            };
+          } catch (e) {}
+          try {
+            fetch("/api/cheater", { method: "POST", keepalive: true }).catch(() => {});
+          } catch (e) {}
+        }
+        // Resolves true if any of the 6 places says this player was caught
+        function isBanned() {
+          let hit = false;
+          try {
+            hit =
+              !!localStorage.getItem(BAN_KEY) ||
+              !!sessionStorage.getItem(BAN_KEY) ||
+              document.cookie.includes(BAN_KEY + "=1") ||
+              window.name === BAN_KEY;
+          } catch (e) {}
+          if (hit) return Promise.resolve(true);
+          const idb = new Promise((res) => {
+            try {
+              const r = indexedDB.open("pd_ban", 1);
+              r.onupgradeneeded = () => r.result.createObjectStore("b");
+              r.onerror = () => res(false);
+              r.onsuccess = () => {
+                try {
+                  const g = r.result.transaction("b").objectStore("b").get("x");
+                  g.onsuccess = () => res(!!g.result);
+                  g.onerror = () => res(false);
+                } catch (e) {
+                  res(false);
+                }
+              };
+            } catch (e) {
+              res(false);
+            }
+          });
+          const srv = fetch("/api/cheater", { cache: "no-store" })
+            .then((r) => (r.ok ? r.json() : {}))
+            .then((j) => !!j.banned)
+            .catch(() => false);
+          return Promise.all([idb, srv]).then((a) => a[0] || a[1]);
+        }
+        // Full-screen black cheater screen. Rebuilds itself if someone deletes or hides it.
+        function showCheater() {
+          if (cheated) return;
+          cheated = true;
+          let obs;
+          const enforce = () => {
+            if (obs) obs.disconnect();
+            let d = document.getElementById("cheat");
+            if (!d) {
+              d = document.createElement("div");
+              d.id = "cheat";
+            }
+            if (d.children.length !== 3) d.innerHTML = CHEAT_HTML;
+            d.style.cssText = CHEAT_CSS;
+            document.body.appendChild(d);
+            if (obs)
+              obs.observe(document.documentElement, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+              });
+          };
+          obs = new MutationObserver(enforce);
+          enforce();
+          setInterval(enforce, 500);
+        }
+        // Caught! Save the ban everywhere, then show the screen
+        function cheat() {
+          banSet();
+          showCheater();
+        }
+        // Score can only change through setScore, which keeps a signature
+        function setScore(v) {
+          if (v < 0 || (v !== 0 && v - score > 6000)) cheat();
+          score = v;
+          scoreSig = hash("s" + v);
+        }
+        // Runs every frame: do score, hearts, and level still make sense?
+        function verify() {
+          if (
+            hash("s" + score) !== scoreSig ||
+            lives < 0 ||
+            lives > D.lives ||
+            level !== 1 + Math.floor(served / 5) ||
+            combo < 0
+          )
+            cheat();
+        }
+        // Hi-scores are saved with a signature so edited saves are caught
+        function saveHI() {
+          try {
+            localStorage.setItem("pdhi3", JSON.stringify({ d: HI, s: hash(JSON.stringify(HI)) }));
+          } catch (e) {}
+        }
+
+        // Settings (S) and best scores (HI) are saved in the browser when allowed
+        let S = { snd: 1, mus: 1, crt: 1 };
+        try {
+          Object.assign(S, JSON.parse(localStorage.getItem("pdset2") || "{}"));
+        } catch (e) {}
+        let HI = { easy: 0, medium: 0, hard: 0 };
+        {
+          let raw = null,
+            o = null;
+          try {
+            raw = localStorage.getItem("pdhi3");
+          } catch (e) {}
+          if (raw) {
+            try {
+              o = JSON.parse(raw);
+            } catch (e) {}
+            if (!o || !o.d || o.s !== hash(JSON.stringify(o.d))) cheat();
+            else Object.assign(HI, o.d);
+          }
+        }
+        function save() {
+          try {
+            localStorage.setItem("pdset2", JSON.stringify(S));
+          } catch (e) {}
+          document.body.classList.toggle("nocrt", !S.crt);
+          music(run);
+        }
+        // Game state: dk = difficulty key, D = difficulty settings, seats = customers, plate = ingredients on the plate,
+        // held = 2 hold slots, sel = selected hold slot (-1 none), freeze = time until shake freeze ends
+        let A,
+          dk = "medium",
+          D = DIF.medium,
+          seats = [],
+          plate = [],
+          held = [null, null],
+          sel = -1,
+          score = 0,
+          lives = 3,
+          level = 1,
+          served = 0,
+          run = false,
+          spawnAt = 0,
+          combo = 0,
+          pauseAt = 0,
+          freeze = 0,
+          lastT = 0;
+        // ============================================================
+        // AUDIO: sound effects and music
+        // ============================================================
+        function beep(f, d, t = "square", v = 0.05) {
+          if (!S.snd || cheated) return;
+          try {
+            A = A || new (window.AudioContext || window.webkitAudioContext)();
+            const o = A.createOscillator(),
+              g = A.createGain();
+            o.type = t;
+            o.frequency.value = f;
+            g.gain.value = v;
+            o.connect(g);
+            g.connect(A.destination);
+            o.start();
+            g.gain.exponentialRampToValueAtTime(0.0001, A.currentTime + d);
+            o.stop(A.currentTime + d);
+          } catch (e) {}
+        }
+        const NT = [262, 330, 392, 330, 294, 370, 440, 370, 262, 330, 392, 523, 494, 392, 330, 392];
+        let mi = 0,
+          mt;
+        function music(on) {
+          clearInterval(mt);
+          if (on && S.mus && S.snd)
+            mt = setInterval(() => {
+              beep(NT[mi % 16], 0.15, "square", 0.016);
+              if (mi % 4 == 0) beep(NT[mi % 16] / 4, 0.35, "triangle", 0.04);
+              mi++;
+            }, 170);
+        }
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        // key: sorts ingredients so order does not matter; match: dish on the plate; cur: dish being used
+        const key = (a) => [...a].sort().join(),
+          match = () => REC.find((r) => key(r.i) === key(plate)),
+          cur = () => (sel >= 0 ? held[sel] : match());
+        const nSeats = () => (level >= 5 ? 6 : level >= 3 ? 5 : 4);
+        function pop(i, t, c) {
+          const r = $("seats").children[i].getBoundingClientRect(),
+            d = document.createElement("div");
+          d.className = "pop";
+          d.textContent = t;
+          d.style.cssText = `left:${r.left + r.width / 2}px;top:${r.top + 10}px;color:${c || "#ffe033"}`;
+          document.body.appendChild(d);
+          setTimeout(() => d.remove(), 1000);
+        }
+        function ban(t) {
+          const b = document.createElement("div");
+          b.className = "ban";
+          b.textContent = t;
+          document.body.appendChild(b);
+          setTimeout(() => b.remove(), 1400);
+        }
+        // ============================================================
+        // GAME UI: plate, hold slots, buttons
+        // ============================================================
+
+        $("ings").innerHTML = ING.map(
+          (k) => `<button class="ing" data-k="${k}" aria-label="${k}">${ig(k, 32)}</button>`,
+        ).join("");
+        $("menu").innerHTML = REC.map(
+          (r) =>
+            `<div class="rc${r.pw ? " pw" : ""}">${r.i.map((k) => ig(k, 26)).join('<b class="eq">+</b>')}<b class="eq">=</b>${ig(r.id, 40)}<div class="nm">${r.n}${r.pw ? " (POWER-UP)" : ""}</div></div>`,
+        ).join("");
+        $("seats").innerHTML = [0, 1, 2, 3, 4, 5]
+          .map((i) => `<div class="seat empty" data-s="${i}"></div>`)
+          .join("");
+        $("ings").onclick = (e) => {
+          const b = e.target.closest(".ing");
+          if (!b || !run) return;
+          if (plate.length < 3) {
+            plate.push(b.dataset.k);
+            beep(520 + plate.length * 90, 0.07);
+          } else beep(120, 0.1);
+          sel = -1;
+          drawK();
+        };
+        $("trash").onclick = () => {
+          if (!run) return;
+          if (sel >= 0) {
+            held[sel] = null;
+            sel = -1;
+          } else plate = [];
+          beep(150, 0.12, "sawtooth");
+          drawK();
+        };
+        document.querySelectorAll(".slot").forEach(
+          (b) =>
+            (b.onclick = () => {
+              if (!run) return;
+              const i = +b.dataset.h;
+              if (held[i]) {
+                sel = sel === i ? -1 : i;
+                beep(700, 0.05);
+              }
+              drawK();
+            }),
+        );
+        $("hb").onclick = () => {
+          if (!run) return;
+          const m = match(),
+            f = held.indexOf(null);
+          if (sel >= 0 || !m || f < 0) {
+            beep(120, 0.1);
+            return;
+          }
+          held[f] = m;
+          plate = [];
+          beep(780, 0.08);
+          drawK();
+        };
+        $("pw").onclick = () => {
+          if (!run) return;
+          const d = cur();
+          if (!d || !d.pw) return;
+          if (sel >= 0) {
+            held[sel] = null;
+            sel = -1;
+          } else plate = [];
+          if (d.pw === "cake") {
+            seats.forEach((c, i) => {
+              if (c && c.st === "wait") {
+                c.p += 6000;
+                pop(i, "+6s", "#5dff6e");
+              }
+            });
+            ban("+6s TIME!");
+          } else {
+            freeze = performance.now() + 4000;
+            ban("FREEZE!");
+          }
+          [660, 880, 1100, 1320].forEach((f, i) =>
+            setTimeout(() => beep(f, 0.12, "triangle"), i * 70),
+          );
+          drawK();
+        };
+        function drawK() {
+          const m = match();
+          // Light up recipes that match what is on the plate so far
+          document
+            .querySelectorAll(".rc")
+            .forEach((el, i) =>
+              el.classList.toggle(
+                "hl",
+                plate.length > 0 && plate.every((k) => REC[i].i.includes(k)),
+              ),
+            );
+          $("plate").innerHTML =
+            (plate.map((k) => ig(k, 36)).join("") ||
+              '<span style="font-size:9px;color:#6a55b0">EMPTY PLATE</span>') +
+            (m ? `<small>${ig(m.id, 36)}${m.n}</small>` : "");
+          document.querySelectorAll(".slot").forEach((b, i) => {
+            b.innerHTML = held[i] ? ig(held[i].id, 40) : "";
+            b.classList.toggle("sel", sel === i);
+          });
+          const d = cur();
+          $("pw").classList.toggle("hide", !(d && d.pw));
+          if (d && d.pw) $("pw").textContent = d.lab;
+          $("hb").disabled = !(m && sel < 0 && held.includes(null));
+        }
+        // Updates the top bar
+        function hud() {
+          $("sc").textContent = score;
+          $("lv").textContent = level;
+          $("hi").textContent = Math.max(HI[dk], score);
+          $("lives").textContent = "❤️".repeat(lives) + "🖤".repeat(Math.max(0, D.lives - lives));
+          $("pg").style.width = (served % 5) * 20 + "%";
+          $("cb").textContent = combo > 1 ? "COMBO x" + Math.min(combo, 5) : "";
+        }
+        const pat = () => Math.max(6500, 17000 - level * 1000) * D.pm;
+        // ============================================================
+        // GAME LOGIC: customers arriving, serving, game loop
+        // ============================================================
+        // A new customer sits down with 1 or 2 orders
+        function spawn() {
+          const n = nSeats(),
+            free = [];
+          for (let i = 0; i < n; i++) if (!seats[i]) free.push(i);
+          if (!free.length) return;
+          const i = rnd(free),
+            K = rnd(KINDS),
+            pool = ORD.slice(0, Math.min(ORD.length, 3 + level)),
+            two = level >= 4 && Math.random() < 0.35;
+          const cus = {
+            ...K,
+            skin: K.k === "granny" ? "#f2c9a6" : K.k === "alien" ? "#6bff6b" : rnd(SK),
+            hair: K.k === "granny" ? "#cfcfcf" : K.k === "punk" ? rnd(PK) : rnd(HR),
+            shirt:
+              K.k === "shades"
+                ? "#222"
+                : K.k === "ninja"
+                  ? "#111"
+                  : K.k === "king"
+                    ? "#a020a0"
+                    : rnd(SH),
+          };
+          seats[i] = {
+            orders: two ? [rnd(pool), rnd(pool)] : [rnd(pool)],
+            t: performance.now(),
+            p: pat() * K.pm * (two ? 1.5 : 1),
+            cus,
+            st: "wait",
+            until: 0,
+            say: "",
+          };
+          beep(880, 0.08, "triangle");
+        }
+        // Serve the customer at table i with the selected dish
+        function serve(i) {
+          const c = seats[i];
+          if (!c || c.st !== "wait") return;
+          const d = cur(),
+            x = d ? c.orders.indexOf(d) : -1;
+          if (x >= 0) {
+            const left = Math.max(0, 1 - (performance.now() - c.t) / c.p),
+              perf = left > 0.7;
+            combo++;
+            const pts = Math.round(
+              (100 + left * 150 + (perf ? 50 : 0)) * Math.min(combo, 5) * (c.cus.vip || 1) * D.sc,
+            );
+            setScore(score + pts);
+            c.orders.splice(x, 1);
+            if (sel >= 0) {
+              held[sel] = null;
+              sel = -1;
+            } else plate = [];
+            pop(i, "+" + pts, "#ffe033");
+            if (perf) setTimeout(() => pop(i, "PERFECT!", "#27f0ff"), 150);
+            beep(660, 0.08);
+            setTimeout(() => beep(990, 0.14), 90);
+            if (!c.orders.length) {
+              c.st = "eat";
+              c.until = performance.now() + 1100;
+              c.say = "YUM!";
+              served++;
+              if (served % 5 === 0) {
+                level++;
+                ban("LEVEL " + level);
+                beep(1320, 0.3, "triangle");
+                if (level === 3 || level === 5) setTimeout(() => ban("NEW TABLE!"), 1200);
+              }
+            } else c.say = "ONE MORE!";
+          } else {
+            combo = 0;
+            beep(110, 0.25, "sawtooth");
+            c.say = !d ? "NOT READY!" : d.pw ? "USE POWER-UP!" : "WRONG DISH!";
+          }
+          drawK();
+          hud();
+        }
+        $("seats").onclick = (e) => {
+          const s = e.target.closest(".seat");
+          if (!s || !run) return;
+          serve(+s.dataset.s);
+        };
+        // Redraws every table (only rebuilds a seat when something changed)
+        function draw(now) {
+          const n = nSeats();
+          for (let i = 0; i < 6; i++) {
+            const el = $("seats").children[i],
+              c = seats[i];
+            if (i >= n) {
+              if (el.dataset.sig !== "l" + i) {
+                el.dataset.sig = "l" + i;
+                el.className = "seat empty";
+                el.innerHTML = "LOCKED<br>LVL " + (i === 4 ? 3 : 5);
+              }
+              continue;
+            }
+            if (!c) {
+              if (el.dataset.sig !== "e") {
+                el.dataset.sig = "e";
+                el.className = "seat empty";
+                el.innerHTML = "FREE TABLE";
+              }
+              continue;
+            }
+            const f = c.st === "wait" ? Math.max(0, 1 - (now - c.t) / c.p) : 1,
+              fz = now < freeze && c.st === "wait";
+            const m =
+              c.st === "eat"
+                ? "eat"
+                : c.st === "gone"
+                  ? "mad"
+                  : f > 0.6
+                    ? "ok"
+                    : f > 0.3
+                      ? "meh"
+                      : "mad";
+            const cls =
+              "seat" +
+              (c.st === "eat" ? " eat" : "") +
+              (c.st === "gone" || (c.st === "wait" && f < 0.25 && !fz) ? " mad" : "") +
+              (fz ? " ice" : "");
+            const sig = m + c.st + c.say + cls + c.cus.k + c.orders.map((o) => o.id);
+            if (el.dataset.sig !== sig) {
+              el.dataset.sig = sig;
+              el.className = cls;
+              el.innerHTML = `<div class="row">${px(pp(c.cus, m), 64)}<div class="want">${c.orders.map((o) => `<div>${ig(o.id, c.orders.length > 1 ? 30 : 40)}</div>`).join("")}</div></div><div class="bar"><i></i></div><div class="say">${c.say || (c.st === "gone" ? "I'M LEAVING!" : "")}</div>`;
+            }
+            const b = el.querySelector(".bar i");
+            b.style.width = f * 100 + "%";
+            b.style.background = fz
+              ? "#9ff"
+              : f > 0.5
+                ? "var(--grn)"
+                : f > 0.25
+                  ? "var(--yel)"
+                  : "var(--red)";
+          }
+        }
+        // Main loop: runs every frame
+        function tick(now) {
+          if (!run || cheated) return;
+          const dt = now - lastT;
+          lastT = now;
+          verify();
+          if (now < freeze) {
+            seats.forEach((c) => {
+              if (c && c.st === "wait") c.t += dt;
+            });
+            spawnAt += dt;
+          }
+          if (now >= spawnAt) {
+            spawn();
+            spawnAt = now + (Math.max(1300, 4200 - level * 330) + Math.random() * 1100) * D.sp;
+          }
+          for (let i = 0; i < 6; i++) {
+            const c = seats[i];
+            if (!c) continue;
+            if (c.st === "eat" && now > c.until) seats[i] = null;
+            else if (c.st === "wait" && now - c.t > c.p) {
+              c.st = "gone";
+              c.until = now + 900;
+              lives--;
+              combo = 0;
+              beep(200, 0.3, "sawtooth");
+              pop(i, "LOST!", "#ff4040");
+              $("g").classList.remove("hurt");
+              void $("g").offsetWidth;
+              $("g").classList.add("hurt");
+              hud();
+              if (lives <= 0) return end();
+            } else if (c.st === "gone" && now > c.until) seats[i] = null;
+          }
+          draw(now);
+          if (run) requestAnimationFrame(tick);
+        }
+        // Begin a new run on difficulty k
+        function start(k) {
+          if (k) {
+            dk = k;
+            D = DIF[k];
+          }
+          seats = [];
+          plate = [];
+          held = [null, null];
+          sel = -1;
+          setScore(0);
+          lives = D.lives;
+          level = 1;
+          served = 0;
+          combo = 0;
+          freeze = 0;
+          paused = false;
+          run = true;
+          lastT = spawnAt = performance.now();
+          spawnAt += 500;
+          $("ov").classList.add("hide");
+          drawK();
+          hud();
+          draw(lastT);
+          [440, 660, 880].forEach((f, i) => setTimeout(() => beep(f, 0.12), i * 110));
+          music(1);
+          ban("GET COOKING!");
+          requestAnimationFrame(tick);
+        }
+        // Game over screen
+        function end() {
+          run = false;
+          paused = false;
+          music(0);
+          draw(performance.now());
+          const nh = score > HI[dk] && score > 0;
+          if (nh) {
+            HI[dk] = score;
+            try {
+              saveHI();
+            } catch (e) {}
+          }
+          hud();
+          [300, 240, 180, 120].forEach((f, i) =>
+            setTimeout(() => beep(f, 0.25, "sawtooth"), i * 200),
+          );
+          show(
+            `<h1>GAME<br>OVER</h1><div class="card" style="text-align:center;font-size:10px"><p>SCORE ${score}<br>CUSTOMERS FED ${served}<br>LEVEL ${level}<br>${DIF[dk].n} BEST ${HI[dk]}</p>${nh ? '<p class="blink" style="margin-top:8px">NEW HI-SCORE!</p>' : ""}</div><button class="big grn" onclick="PD.start()">PLAY AGAIN</button><button class="big" onclick="PD.diffs()">CHANGE DIFFICULTY</button><button class="big pnk" onclick="PD.menu()">MAIN MENU</button>`,
+          );
+        }
+        function pause() {
+          if (!run) return;
+          run = false;
+          pauseAt = performance.now();
+          paused = true;
+          music(0);
+          menu(1);
+        }
+        function resume() {
+          const d = performance.now() - pauseAt;
+          seats.forEach((c) => {
+            if (c) {
+              c.t += d;
+              c.until += d;
+            }
+          });
+          spawnAt += d;
+          freeze += d;
+          paused = false;
+          run = true;
+          lastT = performance.now();
+          $("ov").classList.add("hide");
+          music(1);
+          requestAnimationFrame(tick);
+        }
+        $("mb").onclick = pause;
+        let paused = false; // true while the pause menu is open
+        // ESC pauses (and resumes). The game also pauses when you switch tabs.
+        document.addEventListener("keydown", (e) => {
+          if (cheated) return e.preventDefault();
+          if (e.key === "Escape") {
+            if (run) pause();
+            else if (paused) resume();
+          }
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden && run) pause();
+        });
+        // ============================================================
+        // MENUS: title, difficulty, how to play, settings
+        // ============================================================
+
+        function show(h) {
+          $("in").innerHTML = h;
+          $("ov").classList.remove("hide");
+          $("ov").scrollTop = 0;
+        }
+        const face = (K, n) =>
+          px(
+            pp(
+              {
+                ...K,
+                skin: K.k === "alien" ? "#6bff6b" : "#f2c28f",
+                hair: K.k === "granny" ? "#cfcfcf" : K.k === "punk" ? "#ff2e93" : "#6b3a1e",
+                shirt:
+                  K.k === "shades"
+                    ? "#222"
+                    : K.k === "ninja"
+                      ? "#111"
+                      : K.k === "king"
+                        ? "#a020a0"
+                        : "#3a8fd9",
+              },
+              "ok",
+            ),
+            n,
+          );
+        function menu(p) {
+          show(`<h1>PIXEL<br>DINER<br><span style="font-size:.6em;color:var(--cyan);text-shadow:2px 2px 0 var(--pink)">DELUXE</span></h1>
+<div class="parade">${KINDS.map((K) => face(K, 44)).join("")}</div><div class="parade">${["burger", "pizza", "sushi", "sundae", "cake", "shake", "hotdog", "fries"].map((k) => ig(k, 36)).join("")}</div>
+<button class="big grn" onclick="${p ? "PD.resume()" : "PD.diffs()"}">${p ? "RESUME" : "INSERT COIN"}</button>
+<button class="big" onclick="PD.how(${p ? 1 : 0})">HOW TO PLAY</button><button class="big pnk" onclick="PD.sets(${p ? 1 : 0})">SETTINGS</button>
+${p ? '<button class="big red" onclick="PD.end()">QUIT RUN</button><p style="font-size:8px;color:var(--mut)">PRESS ESC TO RESUME</p>' : '<p class="blink">PRESS START</p>'}`);
+        }
+        function diffs() {
+          const L = { easy: "granny", medium: "normal", hard: "ninja" };
+          show(
+            `<h1 style="font-size:20px">SELECT<br>DIFFICULTY</h1>` +
+              Object.keys(DIF)
+                .map(
+                  (k) =>
+                    `<button class="d ${k}" onclick="PD.start('${k}')">${face(
+                      KINDS.find((x) => x.k === L[k]),
+                      52,
+                    )}<span>${DIF[k].n}<small>${DIF[k].d}<br>BEST ${HI[k]}</small></span></button>`,
+                )
+                .join("") +
+              `<button class="big" onclick="PD.menu()">BACK</button>`,
+          );
+        }
+        function how(p) {
+          show(`<h1 style="font-size:18px">HOW TO PLAY</h1>
+<div class="card">1. Tap ingredients to build a plate (max 3).<br>2. When the dish name appears, tap the customer who ordered it.<br>3. Faster = more points. Serve in the first 30% of their patience for a PERFECT bonus. Serve in a row to build a combo up to x5.<br>4. Customers who run out of patience storm off and cost you a heart.<br>5. From level 4, some guests order 2 dishes and wait longer. Tables unlock at levels 3 and 5.</div>
+<div class="card"><b style="color:var(--cyan)">HOLD:</b> make a dish and press HOLD to store it in one of 2 slots. Tap a held dish (turns green), then tap a customer to serve it.</div>
+<div class="card"><b style="color:var(--cyan)">POWER-UPS:</b> nobody orders these. CAKE adds 6 seconds to everyone waiting. SHAKE freezes all patience for 4 seconds. Use the pink button when one is on your plate or selected.</div>
+<h2>CUSTOMERS</h2><div class="card">${KINDS.filter((K) => K.d)
+            .map(
+              (K) =>
+                `<div class="rec">${face(K, 40)}<span style="margin:0 0 0 6px;color:var(--ink);flex:1">${K.d}</span></div>`,
+            )
+            .join("")}</div>
+<h2>RECIPES</h2><div class="card">${REC.map((r) => `<div class="rec">${r.i.map((k) => ig(k, 28)).join("")}<b style="color:var(--yel)">=</b>${ig(r.id, 34)}<span>${r.n}</span></div>`).join("")}<p style="margin-top:8px;color:var(--mut)">Order of ingredients does not matter. New dishes unlock as you level up.</p></div>
+<button class="big" onclick="PD.menu(${p})">BACK</button>`);
+        }
+        function sets(p) {
+          const o = (k, v, l) =>
+            `<button class="${S[k] === v ? "on" : ""}" onclick="PD.opt('${k}',${v},${p})">${l}</button>`;
+          show(`<h1 style="font-size:18px">SETTINGS</h1>
+<div class="card"><p>SOUND FX</p><div class="acts">${o("snd", 1, "ON")}${o("snd", 0, "OFF")}</div></div>
+<div class="card"><p>MUSIC</p><div class="acts">${o("mus", 1, "ON")}${o("mus", 0, "OFF")}</div></div>
+<div class="card"><p>CRT SCANLINES</p><div class="acts">${o("crt", 1, "ON")}${o("crt", 0, "OFF")}</div></div>
+<button class="big" onclick="PD.menu(${p})">BACK</button>`);
+          if (S.snd) beep(600, 0.06);
+        }
+        // ============================================================
+        // START
+        // ============================================================
+        save();
+        hud();
+        drawK();
+        menu();
+        // Boot: if this player was already caught, lock the game right away
+        isBanned().then((b) => {
+          if (b) showCheater();
+        });
+        // Only these functions are reachable from the menu buttons. Everything else stays private.
+        window.PD = Object.freeze({
+          start,
+          diffs,
+          menu,
+          how,
+          sets,
+          resume,
+          end,
+          opt: (k, v, p) => {
+            S[k] = v;
+            save();
+            sets(p);
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>
